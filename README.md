@@ -1,4 +1,4 @@
-# Extract all archives from a folder AND recursively extract all archives withing the archive to a proper destinatin
+# Extract all archives from a folder AND recursively extract all archives withing the archive to a proper destinatin - creates a folder based on the origunal file name
 We all have these folder full or rar files whch once extracted end up with more archive
 The tool will recursively scan all archives in a folder and process them extracting all subarchives and moving all extracted files to different folder
 
@@ -11,3 +11,5 @@ It can be changed to recursively scan again and again for hidden archives, but I
 That's wht the recursive sub extract puts file directly into the output folder, but this can be changed
 
 Handles multi part archives for rar, zip and 7z files
+
+Will skip files if the output folder already has a subfolder with the archive name
