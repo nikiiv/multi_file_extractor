@@ -63,26 +63,26 @@ def is_core_archive(file_path: Path) -> bool:
     return False
 
 
-def extract_archive(archive_path: Path, tmp_dir: Path):
+def extract_archive(archive_path: Path, target_folder: Path):
     """
     Extracts an archive to tmp_dir using external commands.
     Adjust as needed for different archive types.
     """
-    tmp_dir.mkdir(parents=True, exist_ok=True)
+    target_folder.mkdir(parents=True, exist_ok=True)
 
     filename = archive_path.name.lower()
 
     # Use 7z for most things, but we’ll try specialized tools for .rar and .zip
     if filename.endswith('.zip'):
-        cmd = ['unzip', '-o', str(archive_path), '-d', str(tmp_dir)]
+        cmd = ['unzip', '-o', str(archive_path), '-d', str(target_folder)]
     elif filename.endswith('.rar'):
-        cmd = ['unrar', 'x', '-o+', str(archive_path), str(tmp_dir)]
+        cmd = ['unrar', 'x', '-o+', str(archive_path), str(target_folder)]
     else:
         # Fallback: 7z can handle .7z, .7z.001, .gz, .tar, etc.
         # It's also possible to handle .zip and .rar with 7z if you prefer.
-        cmd = ['7z', 'x', '-y', f'-o{tmp_dir}', str(archive_path)]
+        cmd = ['7z', 'x', '-y', f'-o{target_folder}', str(archive_path)]
 
-    print(f"[INFO] Extracting {archive_path} ...")
+    print(f"[INFO] Extracting {archive_path} =>  {target_folder}")
     try:
         # subprocess.run(cmd, check=True)
         subprocess.run(cmd, stdout=subprocess.DEVNULL, check=True)
@@ -124,7 +124,7 @@ def move_non_archives(src_dir: Path, dest_dir: Path):
                 continue
 
             # Otherwise, move the file
-            print(f"[INFO] Moving file: {file_path} to {target_path}")
+            print(f"[INFO] Moving file: {file_path} =>  {target_path}")
             target_path.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(file_path), str(target_path))
 
@@ -151,7 +151,7 @@ def recursively_extract(tmp_dir: Path, dest_folder: Path):
 
         for archive in archives:
             #extract_archive(archive, archive.parent)  # extract in place
-            extract_archive(archive, dest_folder)  # extract directly to outut
+            extract_archive(archive, dest_folder)  # extract directly to output
             # After extraction, remove the original archive file
             try:
                 archive.unlink()
